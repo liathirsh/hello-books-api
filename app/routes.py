@@ -6,9 +6,9 @@
 from flask import Blueprint, jsonify
 
 class Book():
-    def __init__ (self, id, title, author, genre, num_in_series=0):
+    def __init__ (self, id, name, author, genre, num_in_series=0):
         self.id = id
-        self.name = title
+        self.name = name
         self.author = author
         self.genre = genre
         self.num_in_series = num_in_series
@@ -24,16 +24,16 @@ BOOKS = [
 
 books_bp = Blueprint("books", __name__)
 
-@books_bp.route("/books", methods=["GET"])
+@books_bp.route("", methods=["GET"])
 def get_all_books():
     result = []
     for book in BOOKS:
         result.append({
             "id": book.id,
-            "title": book.title,
+            "title": book.name,
             "author": book.author,
             "genre": book.genre,
             "number in series": book.num_in_series
         })
-        
+
     return jsonify(result)
