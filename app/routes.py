@@ -6,9 +6,9 @@
 from flask import Blueprint, jsonify
 
 class Book():
-    def __init__ (self, id, name, author, genre, num_in_series=0):
+    def __init__ (self, id, title, author, genre, num_in_series=0):
         self.id = id
-        self.name = name
+        self.name = title
         self.author = author
         self.genre = genre
         self.num_in_series = num_in_series
@@ -30,9 +30,10 @@ def get_all_books():
     for book in BOOKS:
         result.append({
             "id": book.id,
-            "name": book.name,
+            "title": book.title,
             "author": book.author,
             "genre": book.genre,
             "number in series": book.num_in_series
         })
+        
     return jsonify(result)
