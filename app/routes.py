@@ -3,7 +3,7 @@
 # Flask will often refer to these routes using the word "view"
 
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 class Book():
     def __init__ (self, id, name, author, genre, num_in_series=0):
@@ -38,13 +38,22 @@ def get_all_books():
 
     return jsonify(result)
 
+def validate_book(book_id):
+    try:
+        book_id = int(book_id)
+    except:
+        abort(make_response({f"message":f"book {book_id} invalid"}, 400))
+
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+    
+    abort(make_response({"message":f"book {book_id} not found"}, 404))
+
+
 @books_bp.route("/<book_id>", methods=["GET"])
 def handle_book(book_id):
-    #try:
-    book_id = int(book_id)
-    #except:
-        #return {f"message":f"book {book_id} not found"}, 404
-
+    book = validate_book(book_id)
     for book in BOOKS:
         if book.id == book_id:
             return {
@@ -54,5 +63,4 @@ def handle_book(book_id):
                 "genre": book.genre,
                 "number in series": book.num_in_series
             }
-    return {f"message":f"book {book_id} not found"}, 404
 
